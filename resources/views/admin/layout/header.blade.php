@@ -54,7 +54,11 @@
             <li class="nav-item dropdown user-menu">
                 <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
                     <img
-                        src="{{ asset('admin/images/user2-160x160.jpg') }}"
+                        @if(!empty(Auth::guard('admins')->user()->image))
+                            src="{{ asset('admin/images/photos/' . Auth::guard('admins')->user()->image) }}"
+                        @else
+                            src="{{ asset('admin/images/user2-160x160.jpg') }}"
+                        @endif
                         class="user-image rounded-circle shadow"
                         alt="User Image" />
                     <span class="d-none d-md-inline">{{ Auth::guard('admins')->user()->name }}</span>
@@ -63,7 +67,11 @@
                     <!--begin::User Image-->
                     <li class="user-header text-bg-primary">
                         <img
-                            src="{{ asset('admin/images/user2-160x160.jpg') }}"
+                            @if(!empty(Auth::guard('admins')->user()->image))
+                                src="{{ asset('admin/images/photos/' . Auth::guard('admins')->user()->image) }}"
+                            @else
+                                src="{{ asset('admin/images/user2-160x160.jpg') }}"
+                            @endif
                             class="rounded-circle shadow"
                             alt="User Image" />
                         <p>

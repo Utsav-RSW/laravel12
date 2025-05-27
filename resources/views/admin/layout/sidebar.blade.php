@@ -46,6 +46,12 @@
                                 <p>Update Password</p>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a href="{{ route('admin.update-details') }}" class="nav-link {{ Session::get('page') == 'update-details' ? 'active' : '' }}">
+                                <i class="nav-icon bi bi-circle"></i>
+                                <p>Update Details</p>
+                            </a>
+                        </li>
                     </ul>
                 </li>
                 <li class="nav-item">

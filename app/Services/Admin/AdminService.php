@@ -5,6 +5,8 @@ namespace App\Services\Admin;
 use App\Models\Admin;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Gd\Driver;
 
 class AdminService
 {
@@ -60,5 +62,48 @@ class AdminService
         }
 
         return ['status' => $status, 'message' => $message];
+    }
+
+    public function updateDetails($request)
+    {
+        $data = $request->all();
+
+        if($request->has('image')) {
+            $image_temp = $request->file('image');
+            if($image_temp->isValid()) {
+                $manager = new ImageManager(new Driver());
+                $image = $manager->read($image_temp);
+                $extention = $image_temp->getClientOriginalExtension();
+                $imageName = rand(111,99999).'.'.$extention;
+                $image_path = public_path('admin/images/photos/' . $imageName);
+                $image->save($image_path);
+            }
+        }
+        elseif(!empty($data['current_image'])) {
+            $imageName = $data['current_image'];
+        }
+        else {
+            $imageName = "";
+        }
+
+        Admin::where('email', Auth::guard('admins')->user()->email)->update([
+            'name' => $data['name'],
+            'mobile' => $data['mobile'],
+            'image' => $imageName
+        ]);
+    }
+    
+    public function deleteProfileImage($adminId)
+    {
+        $profileImage = Admin::where('id', $adminId)->value('image');
+        if($profileImage) {
+            $profile_image_path = 'admin/images/photos/' . $profileImage;
+            if(file_exists($profile_image_path)) {
+                unlink($profile_image_path);
+            }
+            Admin::where('id', $adminId)->update(['image' => null]);
+            return ['status' => true, 'message' => 'Profile image has been deleted successfully!'];
+        }
+        return ['status' => false, 'message' => 'Profile image does not exist!'];
     }
 }

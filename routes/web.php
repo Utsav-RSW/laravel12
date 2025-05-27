@@ -32,6 +32,12 @@ Route::prefix('admin')->group(function () {
         Route::post('verify-password', [AdminController::class, 'verifyPassword'])->name('admin.verify.password');
         // Update Password Route
         Route::post('admin/update-password', [AdminController::class, 'updatePasswordRequest'])->name('admin.update-password.request');
+        // Display update admin details
+        Route::get('update-details', [AdminController::class, 'editDetails'])->name('admin.update-details');
+        // Update admin details route
+        Route::post('update-details', [AdminController::class, 'updateDetailsRequest'])->name('admin.update-details.request');
+        // Delete Profile image route
+        Route::post('delete-profile-image', [AdminController::class, 'deleteProfileImage']);
         Route::get('logout', [AdminController::class, 'destroy'])->name('admin.logout');
     });
 });
